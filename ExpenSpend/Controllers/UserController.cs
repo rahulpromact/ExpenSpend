@@ -1,4 +1,5 @@
-﻿using ExpenSpend.Core.User;
+﻿using ExpenSpend.Core.Account;
+using ExpenSpend.Core.User;
 using ExpenSpend.Repository.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,9 +29,9 @@ public class UserController : ControllerBase
     }
     
     [HttpPost("login")]
-    public async Task<IActionResult> LoginUserAsync(string email, string password)
+    public async Task<IActionResult> LoginUserAsync(LoginDto login)
     {
-        var result = await _userRepository.LoginUserAsync(email, password);
+        var result = await _userRepository.LoginUserAsync(login.UserName, login.Password);
         if (result.Succeeded)
         {
             return Ok();

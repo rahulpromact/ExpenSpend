@@ -10,9 +10,9 @@ namespace ExpenSpend.Repository.User
     public class UserRepository : IUserRepository
     {
         private readonly UserManager<Domain.Models.User> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
+        private readonly SignInManager<Domain.Models.User> _signInManager;
 
-        public UserRepository(UserManager<Domain.Models.User> userManager, SignInManager<IdentityUser> signInManager)
+        public UserRepository(UserManager<Domain.Models.User> userManager, SignInManager<Domain.Models.User> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;

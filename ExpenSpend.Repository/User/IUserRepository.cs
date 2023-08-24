@@ -1,8 +1,6 @@
 ﻿using ExpenSpend.Core.User;
-
-namespace ExpenSpend.Repository.User;
 using Microsoft.AspNetCore.Identity;
-
+namespace ExpenSpend.Repository.User;
 public interface IUserRepository
 {
     Task<IdentityResult> RegisterUserAsync(CreateUserDto user);

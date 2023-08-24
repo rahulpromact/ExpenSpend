@@ -1,5 +1,6 @@
 using ExpenSpend.Domain.Context;
 using ExpenSpend.Domain.Models;
+using ExpenSpend.Repository.Account;
 using ExpenSpend.Repository.User;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ builder.Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<ExpenSpendDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

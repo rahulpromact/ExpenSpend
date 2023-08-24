@@ -9,10 +9,10 @@ namespace ExpenSpend.Core.User
         [RegularExpression(UserConsts.UserNameRegex, ErrorMessage = UserConsts.UserNameRegexErrorMessage)]
         public required string UserName { get; set; }
 
-        [RegularExpression(UserConsts.FirstNameRegex, ErrorMessage = UserConsts.UserNameRegexErrorMessage)]
+        [RegularExpression(UserConsts.FirstNameRegex, ErrorMessage = UserConsts.FirstNameRegexErrorMessage)]
         public required string FirstName { get; set; }
 
-        [RegularExpression(UserConsts.LastNameRegex, ErrorMessage = UserConsts.LastNameRegex)]
+        [RegularExpression(UserConsts.LastNameRegex, ErrorMessage = UserConsts.LastNameRegexErrorMessage)]
         public required string LastName { get; set; }
 
         [EmailAddress(ErrorMessage = UserConsts.EmailErrorMessage)]

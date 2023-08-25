@@ -1,4 +1,6 @@
-﻿using ExpenSpend.Core.User;
+﻿using AutoMapper;
+using ExpenSpend.Core.User;
+using ExpenSpend.Domain.Models;
 using ExpenSpend.Repository.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -12,13 +14,15 @@ namespace ExpenSpend.Web.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IUserRepository _userRepository;
-    private readonly UserManager<Domain.Models.User> _userManager;
+    private readonly UserManager<User> _userManager;
+    private readonly IMapper _mapper;
 
 
-    public UserController(IUserRepository userRepository, UserManager<Domain.Models.User> userManager)
+    public UserController(IUserRepository userRepository, UserManager<User> userManager, IMapper mapper)
     {
         _userRepository = userRepository;
         _userManager = userManager;
+        _mapper = mapper;
     }
     
     [HttpGet("logged-in-user")]
@@ -29,7 +33,7 @@ public class UserController : ControllerBase
         {
             return NotFound("User not found");
         }
-        return Ok(user);
+        return Ok(_mapper.Map<GetUserDto>(user));
     }
     
     [HttpGet("users")]
@@ -47,7 +51,7 @@ public class UserController : ControllerBase
         {
             return NotFound("User not found");
         }
-        return Ok(user);
+        return Ok(_mapper.Map<GetUserDto>(user));
     }
     
     [HttpPut("users/{id}")]
@@ -58,12 +62,8 @@ public class UserController : ControllerBase
         {
             return NotFound("User not found");
         }
-        user.UserName = input.UserName;
-        user.FirstName = input.FirstName;
-        user.LastName = input.LastName;
-        user.Email = input.Email;
-        user.PhoneNumber = input.PhoneNumber;
-        var result = await _userRepository.UpdateUserAsync(user);
+        
+        var result = await _userRepository.UpdateUserAsync(_mapper.Map(input, user));
         
         if (result.Succeeded)
         {

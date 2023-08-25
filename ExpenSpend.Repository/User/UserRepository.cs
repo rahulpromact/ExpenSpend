@@ -1,7 +1,5 @@
-﻿using ExpenSpend.Core.User;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
 namespace ExpenSpend.Repository.User;
 
     

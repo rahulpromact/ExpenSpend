@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpenSpend.Core", "ExpenSpe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpenSpend.Repository", "ExpenSpend.Repository\ExpenSpend.Repository.csproj", "{D308FC3E-DB27-43A2-A2E5-73FCC14CD7A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpenSpend.Domain.Shared", "ExpenSpend.Domain.Shared\ExpenSpend.Domain.Shared.csproj", "{FDDDDFF8-61E3-4BBC-A2C2-3EE29C790918}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpenSpend.Domain.Shared", "ExpenSpend.Domain.Shared\ExpenSpend.Domain.Shared.csproj", "{FDDDDFF8-61E3-4BBC-A2C2-3EE29C790918}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpenSpend.Util", "ExpenSpend.Util\ExpenSpend.Util.csproj", "{4C5DF049-1FEA-4701-899A-0BED7A307CD2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{FDDDDFF8-61E3-4BBC-A2C2-3EE29C790918}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDDDDFF8-61E3-4BBC-A2C2-3EE29C790918}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDDDDFF8-61E3-4BBC-A2C2-3EE29C790918}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C5DF049-1FEA-4701-899A-0BED7A307CD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C5DF049-1FEA-4701-899A-0BED7A307CD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C5DF049-1FEA-4701-899A-0BED7A307CD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C5DF049-1FEA-4701-899A-0BED7A307CD2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

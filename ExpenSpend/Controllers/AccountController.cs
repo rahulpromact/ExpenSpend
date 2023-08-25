@@ -3,6 +3,8 @@ using ExpenSpend.Core.Account;
 using ExpenSpend.Core.User;
 using ExpenSpend.Domain.Models;
 using ExpenSpend.Repository.Account;
+using ExpenSpend.Util.Models;
+using ExpenSpend.Util.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,11 +19,13 @@ public class AccountController : ControllerBase
     private readonly IAccountRepository _accountRepository;
     private readonly IMapper _mapper;
     private readonly UserManager<User> _userManager;
-    public AccountController(IAccountRepository accountRepository, IMapper mapper, UserManager<User> userManager)
+    private readonly IEmailService _emailService;
+    public AccountController(IAccountRepository accountRepository, IMapper mapper, UserManager<User> userManager, IEmailService emailService)
     {
         _accountRepository = accountRepository;
         _mapper = mapper;
         _userManager = userManager;
+        _emailService = emailService;
     }
     
     [HttpPost("register")]
@@ -53,5 +57,13 @@ public class AccountController : ControllerBase
     {
         await _accountRepository.LogoutUserAsync();
         return Ok();
+    }
+    
+    [HttpGet("TestMail")]
+    public async Task<IActionResult> TestEmail()
+    {
+        var message = new Message(new string[] { "r1303yadav@gmail.com" }, "Test", "<h1>Hello</h1>");
+        _emailService.SendEmail(message);
+        return Ok("Message sand successfully");
     }
 }

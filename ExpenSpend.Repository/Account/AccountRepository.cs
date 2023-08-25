@@ -1,4 +1,4 @@
-﻿using ExpenSpend.Core.User;
+﻿
 using Microsoft.AspNetCore.Identity;
 
 namespace ExpenSpend.Repository.Account;
@@ -13,16 +13,9 @@ public class AccountRepository : IAccountRepository
         _userManager = userManager;
         _signInManager = signInManager;
     }
-    public async Task<IdentityResult> RegisterUserAsync(CreateUserDto input)
+    public async Task<IdentityResult> RegisterUserAsync(Domain.Models.User user, string password)
     {
-        return await _userManager.CreateAsync(new Domain.Models.User
-        {
-            UserName = input.UserName,
-            LastName = input.LastName,
-            FirstName = input.FirstName,
-            Email = input.Email,
-            PhoneNumber = input.PhoneNumber
-        }, input.Password);
+        return await _userManager.CreateAsync(user, password);
     }
 
     public async Task<SignInResult> LoginUserAsync(string email, string password)

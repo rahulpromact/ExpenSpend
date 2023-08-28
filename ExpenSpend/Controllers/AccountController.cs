@@ -9,7 +9,7 @@ using ExpenSpend.Util.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Principal;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ExpenSpend.Web.Controllers;
 
@@ -90,6 +90,53 @@ public class AccountController : ControllerBase
     {
         await _accountRepository.LogoutUserAsync();
         return Ok();
+    }
+    
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<IActionResult> ForgotPassword(string email)
+    {
+        var user = await _accountRepository.FindByEmail(email);
+        if (user == null)
+        {
+            return BadRequest(AccConsts.UserNotFound);
+        }
+
+        var passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+        var passwordResetLink = Url.Action(nameof(ResetPassword), "Account", new { token = passwordResetToken, email = user.Email }, Request.Scheme);
+        var emailMessage = new Message(new[] { user.Email }, "Forgot Password Link", passwordResetLink!);
+        _emailService.SendEmail(emailMessage);
+
+        return Ok(AccConsts.PasswordResetReqSuccess);
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> ResetPassword(string token, string email)
+    {
+        var model = new ResetPasswordDto{Token = token, Email = email};
+        return Ok(model);
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
+    {
+        var user = await _accountRepository.FindByEmail(resetPasswordDto.Email);
+        if (user == null)
+        {
+            return BadRequest(AccConsts.UserNotFound);
+        }
+
+        var resetPasswordResult = await _userManager.ResetPasswordAsync(user, resetPasswordDto.Token, resetPasswordDto.Password);
+        if (resetPasswordResult.Succeeded)
+        {
+            return Ok();
+        }
+
+        foreach (var error in resetPasswordResult.Errors)
+        {
+            ModelState.AddModelError(error.Code, error.Description);
+        }
+        return BadRequest(ModelState);
     }
 
 }

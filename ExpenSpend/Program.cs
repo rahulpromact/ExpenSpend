@@ -26,6 +26,8 @@ builder.Services.AddIdentity<User, IdentityRole>(options => options
     .AddEntityFrameworkStores<ExpenSpendDbContext>()
     .AddDefaultTokenProviders();
 
+builder.Services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromHours(2));
+
 // Configure Email Service
 builder.Services.AddSingleton(configuration.GetSection("EmailConfig").Get<EmailConfiguration>());
 

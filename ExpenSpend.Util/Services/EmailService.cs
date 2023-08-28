@@ -86,4 +86,10 @@ public class EmailService : IEmailService
         SendEmail(emailMessage);
     }
     
+    public async Task SendEmailConfirmationEmail(string email, string confirmationLink)
+    {
+        var emailMessage = await CreateEmailValidationTemplateMessage(email, confirmationLink!);
+        SendEmail(emailMessage);
+    }
+    
 }

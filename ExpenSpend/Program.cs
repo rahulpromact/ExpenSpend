@@ -1,6 +1,8 @@
 using ExpenSpend.Domain.Context;
 using ExpenSpend.Domain.Models;
 using ExpenSpend.Repository.Account;
+using ExpenSpend.Repository.Account.Login;
+using ExpenSpend.Repository.Account.Register;
 using ExpenSpend.Repository.User;
 using ExpenSpend.Util.Models;
 using ExpenSpend.Util.Services;
@@ -34,6 +36,8 @@ builder.Services.AddSingleton(configuration.GetSection("EmailConfig").Get<EmailC
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IEmailService, EmailService>();
+builder.Services.AddScoped<IRegistorRepository, RegisterRepository>();
+builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

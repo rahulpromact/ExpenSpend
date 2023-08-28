@@ -4,6 +4,8 @@ using ExpenSpend.Core.User;
 using ExpenSpend.Domain.Models;
 using ExpenSpend.Domain.Shared.Account;
 using ExpenSpend.Repository.Account;
+using ExpenSpend.Repository.Account.Login;
+using ExpenSpend.Repository.Account.Register;
 using ExpenSpend.Util.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,28 +18,31 @@ public class AccountController : ControllerBase
 {
     
     private readonly IAccountRepository _accountRepository;
+    private readonly ILoginRepository _loginRepository;
+    private readonly IRegistorRepository _registorRepository;
     private readonly IMapper _mapper;
     private readonly IEmailService _emailService;
-    public AccountController(IAccountRepository accountRepository, IMapper mapper, IEmailService emailService)
+    public AccountController(IAccountRepository accountRepository, IMapper mapper, IEmailService emailService, ILoginRepository loginRepository, IRegistorRepository registorRepository)
     {
         _accountRepository = accountRepository;
         _mapper = mapper;
         _emailService = emailService;
+        _loginRepository = loginRepository;
+        _registorRepository = registorRepository;
     }
     
     [HttpPost]
     public async Task<IActionResult> RegisterUserAsync(CreateUserDto input)
     {
         var user = _mapper.Map<User>(input);
-        var registrationResult = await _accountRepository.RegisterUserAsync(user, input.Password);
+        var registrationResult = await _registorRepository.RegisterUserAsync(user, input.Password);
 
         if (registrationResult.Succeeded)
         {
-            
-            var emailConfirmationToken = await _accountRepository.GenerateEmailConfirmationTokenAsync(user);
+
+            var emailConfirmationToken = await _registorRepository.GenerateEmailTokenAsync(user);
             var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token = emailConfirmationToken, email = user.Email }, Request.Scheme);
-            var emailMessage = await _emailService.CreateEmailValidationTemplateMessage(user.Email, confirmationLink);
-            _emailService.SendEmail(emailMessage);
+            await _emailService.SendEmailConfirmationEmail(user.Email, confirmationLink!);
 
             return Ok(AccConsts.RegSuccessMessage);
         }
@@ -55,7 +60,7 @@ public class AccountController : ControllerBase
             return Content(AccConsts.UserNotFound);
         }
 
-        var emailConfirmationResult = await _accountRepository.ConfirmEmailAsync(user, token);
+        var emailConfirmationResult = await _registorRepository.ConfirmEmailAsync(user, token);
 
         if (emailConfirmationResult.Succeeded)
         {
@@ -71,7 +76,7 @@ public class AccountController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> LoginUserAsync(LoginDto login)
     {
-        var result = await _accountRepository.LoginUserAsync(login.UserName, login.Password);
+        var result = await _loginRepository.LoginUserAsync(login.UserName, login.Password);
         if (result.Succeeded)
         {
             return Ok();
@@ -83,7 +88,7 @@ public class AccountController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> LogoutUserAsync()
     {
-        await _accountRepository.LogoutUserAsync();
+        await _loginRepository.LogoutUserAsync();
         return Ok();
     }
     

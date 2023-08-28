@@ -1,5 +1,7 @@
 ﻿
+using ExpenSpend.Domain.Context;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace ExpenSpend.Repository.Account;
 
@@ -7,11 +9,13 @@ public class AccountRepository : IAccountRepository
 {
     private readonly UserManager<Domain.Models.User> _userManager;
     private readonly SignInManager<Domain.Models.User> _signInManager;
+    private readonly ExpenSpendDbContext _context;
 
-    public AccountRepository(UserManager<Domain.Models.User> userManager, SignInManager<Domain.Models.User> signInManager)
+    public AccountRepository(UserManager<Domain.Models.User> userManager, SignInManager<Domain.Models.User> signInManager, ExpenSpendDbContext context)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _context = context;
     }
     public async Task<IdentityResult> RegisterUserAsync(Domain.Models.User user, string password)
     {
@@ -26,5 +30,10 @@ public class AccountRepository : IAccountRepository
     public async Task LogoutUserAsync()
     {
         await _signInManager.SignOutAsync();
+    }
+    
+    public async Task<Domain.Models.User?> FindByEmail(string email)
+    {
+        return  await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
     }
 }

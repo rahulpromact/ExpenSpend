@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenSpend.Web.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/[controller]/[action]")]
 [ApiController]
 [Authorize]
 public class UserController : ControllerBase
@@ -25,7 +25,7 @@ public class UserController : ControllerBase
         _mapper = mapper;
     }
     
-    [HttpGet("logged-in-user")]
+    [HttpGet]
     public async Task<IActionResult> GetLoggedInUser()
     {
         var user =  await _userManager.GetUserAsync(User);
@@ -36,14 +36,14 @@ public class UserController : ControllerBase
         return Ok(_mapper.Map<GetUserDto>(user));
     }
     
-    [HttpGet("users")]
+    [HttpGet]
     public async Task<IActionResult> GetAllUsers()
     {
         var users = await _userRepository.GetAllUsersAsync();
         return Ok(users);
     }
     
-    [HttpGet("users/{id}")]
+    [HttpGet]
     public async Task<IActionResult> GetUserById(string id)
     {
         var user = await _userRepository.GetUserByIdAsync(id);
@@ -54,7 +54,7 @@ public class UserController : ControllerBase
         return Ok(_mapper.Map<GetUserDto>(user));
     }
     
-    [HttpPut("users/{id}")]
+    [HttpPut]
     public async Task<IActionResult> UpdateUser(string id, UpdateUserDto input)
     {
         var user = await _userRepository.GetUserByIdAsync(id);
@@ -72,7 +72,7 @@ public class UserController : ControllerBase
         return BadRequest(result.Errors);
     }
     
-    [HttpDelete("users/{id}")]
+    [HttpDelete]
     public async Task<IActionResult> DeleteUser(string id)
     {
         var user = await _userRepository.GetUserByIdAsync(id);

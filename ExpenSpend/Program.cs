@@ -21,7 +21,8 @@ builder.Services.AddDbContext<ExpenSpendDbContext>(options =>
 });
 
 // Configure Identity
-builder.Services.AddIdentity<User, IdentityRole>()
+builder.Services.AddIdentity<User, IdentityRole>(options => options
+    .SignIn.RequireConfirmedEmail = true)
     .AddEntityFrameworkStores<ExpenSpendDbContext>()
     .AddDefaultTokenProviders();
 

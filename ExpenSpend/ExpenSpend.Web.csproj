@@ -30,4 +30,8 @@
     <ProjectReference Include="..\ExpenSpend.Util\ExpenSpend.Util.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\Logo\" />
+  </ItemGroup>
+
 </Project>

@@ -2,16 +2,18 @@
 using ExpenSpend.Core.Account;
 using ExpenSpend.Core.User;
 using ExpenSpend.Domain.Models;
+using ExpenSpend.Domain.Shared.Account;
 using ExpenSpend.Repository.Account;
 using ExpenSpend.Util.Models;
 using ExpenSpend.Util.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Principal;
 
 namespace ExpenSpend.Web.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/[controller]/[action]")]
 [ApiController]
 public class AccountController : ControllerBase
 {
@@ -28,19 +30,50 @@ public class AccountController : ControllerBase
         _emailService = emailService;
     }
     
-    [HttpPost("register")]
+    [HttpPost]
     public async Task<IActionResult> RegisterUserAsync(CreateUserDto input)
     {
         var user = _mapper.Map<User>(input);
-        var result = await _accountRepository.RegisterUserAsync(user, input.Password);
-        if (result.Succeeded)
+        var registrationResult = await _accountRepository.RegisterUserAsync(user, input.Password);
+
+        if (registrationResult.Succeeded)
         {
-            return Ok();
+            
+            var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token = emailConfirmationToken, email = user.Email }, Request.Scheme);
+            var emailMessage = await _emailService.CreateEmailValidationTemplateMessage(user.Email, confirmationLink);
+            _emailService.SendEmail(emailMessage);
+
+            return Ok(AccConsts.RegSuccessMessage);
         }
-        return BadRequest(result.Errors);
+
+        return BadRequest($"Registration failed: {string.Join(", ", registrationResult.Errors)}");
     }
 
-    [HttpPost("login")]
+    [HttpGet]
+    public async Task<ContentResult> ConfirmEmail(string token, string email)
+    {
+        var user = await _accountRepository.FindByEmail(email);
+
+        if (user == null)
+        {
+            return Content(AccConsts.UserNotFound);
+        }
+
+        var emailConfirmationResult = await _userManager.ConfirmEmailAsync(user, token);
+
+        if (emailConfirmationResult.Succeeded)
+        {
+            var htmlContent = await _emailService.EmailConfirmationPageTemplate();
+
+            return Content(htmlContent, "text/html");
+        }
+
+        return Content($"{AccConsts.ConfEmailFailed}: {string.Join(", ", emailConfirmationResult.Errors)}");
+    }
+
+
+    [HttpPost]
     public async Task<IActionResult> LoginUserAsync(LoginDto login)
     {
         var result = await _accountRepository.LoginUserAsync(login.UserName, login.Password);
@@ -52,18 +85,11 @@ public class AccountController : ControllerBase
     }
     
     [Authorize]
-    [HttpPost("logout")]
+    [HttpPost]
     public async Task<IActionResult> LogoutUserAsync()
     {
         await _accountRepository.LogoutUserAsync();
         return Ok();
     }
-    
-    [HttpGet("TestMail")]
-    public async Task<IActionResult> TestEmail()
-    {
-        var message = new Message(new string[] { "r1303yadav@gmail.com" }, "Test", "<h1>Hello</h1>");
-        _emailService.SendEmail(message);
-        return Ok("Message sand successfully");
-    }
+
 }

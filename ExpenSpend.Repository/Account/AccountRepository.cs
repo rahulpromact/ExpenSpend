@@ -37,4 +37,23 @@ public class AccountRepository : IAccountRepository
     {
         return  await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
     }
+
+    public async Task<IdentityResult> ResetPasswordAsync(Domain.Models.User user, string token, string newPassword)
+    {
+        return await _userManager.ResetPasswordAsync(user, token, newPassword);
+    }
+
+    public async Task<string> GenerateEmailConfirmationTokenAsync(Domain.Models.User user)
+    {
+        return await _userManager.GenerateEmailConfirmationTokenAsync(user);
+    }
+    
+    public async Task<IdentityResult> ConfirmEmailAsync(Domain.Models.User user, string token)
+    {
+        return await _userManager.ConfirmEmailAsync(user, token);
+    }
+    public async Task<string> GenerateResetToken(Domain.Models.User user)
+    {
+        return await _userManager.GeneratePasswordResetTokenAsync(user);
+    }
 }

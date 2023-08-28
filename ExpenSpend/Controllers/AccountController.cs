@@ -4,12 +4,9 @@ using ExpenSpend.Core.User;
 using ExpenSpend.Domain.Models;
 using ExpenSpend.Domain.Shared.Account;
 using ExpenSpend.Repository.Account;
-using ExpenSpend.Util.Models;
 using ExpenSpend.Util.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace ExpenSpend.Web.Controllers;
 
@@ -20,13 +17,11 @@ public class AccountController : ControllerBase
     
     private readonly IAccountRepository _accountRepository;
     private readonly IMapper _mapper;
-    private readonly UserManager<User> _userManager;
     private readonly IEmailService _emailService;
-    public AccountController(IAccountRepository accountRepository, IMapper mapper, UserManager<User> userManager, IEmailService emailService)
+    public AccountController(IAccountRepository accountRepository, IMapper mapper, IEmailService emailService)
     {
         _accountRepository = accountRepository;
         _mapper = mapper;
-        _userManager = userManager;
         _emailService = emailService;
     }
     
@@ -39,7 +34,7 @@ public class AccountController : ControllerBase
         if (registrationResult.Succeeded)
         {
             
-            var emailConfirmationToken = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var emailConfirmationToken = await _accountRepository.GenerateEmailConfirmationTokenAsync(user);
             var confirmationLink = Url.Action(nameof(ConfirmEmail), "Account", new { token = emailConfirmationToken, email = user.Email }, Request.Scheme);
             var emailMessage = await _emailService.CreateEmailValidationTemplateMessage(user.Email, confirmationLink);
             _emailService.SendEmail(emailMessage);
@@ -60,7 +55,7 @@ public class AccountController : ControllerBase
             return Content(AccConsts.UserNotFound);
         }
 
-        var emailConfirmationResult = await _userManager.ConfirmEmailAsync(user, token);
+        var emailConfirmationResult = await _accountRepository.ConfirmEmailAsync(user, token);
 
         if (emailConfirmationResult.Succeeded)
         {
@@ -102,16 +97,16 @@ public class AccountController : ControllerBase
             return BadRequest(AccConsts.UserNotFound);
         }
 
-        var passwordResetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
-        var passwordResetLink = Url.Action(nameof(ResetPassword), "Account", new { token = passwordResetToken, email = user.Email }, Request.Scheme);
-        var emailMessage = new Message(new[] { user.Email }, "Forgot Password Link", passwordResetLink!);
-        _emailService.SendEmail(emailMessage);
+        var resetToken = await _accountRepository.GenerateResetToken(user);
+        var resetLink = Url.Action(nameof(ResetPassword), "Account", new { token = resetToken, email = user.Email }, Request.Scheme);
+
+        _emailService.SendPasswordResetEmail(user.Email, resetLink!);
 
         return Ok(AccConsts.PasswordResetReqSuccess);
     }
     
     [HttpGet]
-    public async Task<IActionResult> ResetPassword(string token, string email)
+    public IActionResult ResetPassword(string token, string email)
     {
         var model = new ResetPasswordDto{Token = token, Email = email};
         return Ok(model);
@@ -126,7 +121,7 @@ public class AccountController : ControllerBase
             return BadRequest(AccConsts.UserNotFound);
         }
 
-        var resetPasswordResult = await _userManager.ResetPasswordAsync(user, resetPasswordDto.Token, resetPasswordDto.Password);
+        var resetPasswordResult = await _accountRepository.ResetPasswordAsync(user, resetPasswordDto.Token, resetPasswordDto.Password);
         if (resetPasswordResult.Succeeded)
         {
             return Ok();

@@ -80,6 +80,10 @@ public class EmailService : IEmailService
             client.Dispose(); 
         }
     }
-    
+    public void SendPasswordResetEmail(string recipientEmail, string resetLink)
+    {
+        var emailMessage = new Message(new[] { recipientEmail }, "Forgot Password Link", resetLink);
+        SendEmail(emailMessage);
+    }
     
 }

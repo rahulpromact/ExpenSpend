@@ -1,4 +1,5 @@
-﻿using ExpenSpend.Domain.Models;
+﻿using ExpenSpend.Domain.Context;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
@@ -15,15 +16,6 @@ public class UserRepository : IUserRepository
         _userManager = userManager;
     }
     
-    public async Task<Domain.Models.User?> GetLoggedInUser(ClaimsPrincipal userPrincipal)
-    {
-        if (userPrincipal == null)
-        {
-            throw new ArgumentNullException(nameof(userPrincipal));
-        }
-
-        return await _userManager.GetUserAsync(userPrincipal);
-    }
     public async Task<List<Domain.Models.User>> GetAllUsersAsync()
     {
         return await _userManager.Users.ToListAsync();
@@ -33,7 +25,7 @@ public class UserRepository : IUserRepository
     {
         return await _userManager.FindByIdAsync(id);
     }
-    
+
     public async Task<IdentityResult> UpdateUserAsync(Domain.Models.User user)
     {
         

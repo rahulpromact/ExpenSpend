@@ -7,6 +7,7 @@ using ExpenSpend.Repository.Account;
 using ExpenSpend.Service.Email.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace ExpenSpend.Web.Controllers;
 
@@ -69,17 +70,28 @@ public class AccountController : ControllerBase
     }
 
 
+    //[HttpPost]
+    //public async Task<IActionResult> LoginUserAsync(LoginDto login)
+    //{
+    //    var result = await _accountRepository.LoginUserAsync(login.UserName, login.Password);
+    //    if (result.Succeeded)
+    //    {
+    //        return Ok();
+    //    }
+    //    return BadRequest(result);
+    //}
+
     [HttpPost]
     public async Task<IActionResult> LoginUserAsync(LoginDto login)
-    {
-        var result = await _accountRepository.LoginUserAsync(login.UserName, login.Password);
-        if (result.Succeeded)
+    {   
+        var userToken = await _accountRepository.LoginUserJwtAsync(login.UserName, login.Password, login.RememberMe);
+        if (userToken != null)
         {
-            return Ok();
+            return Ok(new { token = new JwtSecurityTokenHandler().WriteToken(userToken) });
         }
-        return BadRequest(result);
+        return Unauthorized();
     }
-    
+
     [Authorize]
     [HttpPost]
     public async Task<IActionResult> LogoutUserAsync()

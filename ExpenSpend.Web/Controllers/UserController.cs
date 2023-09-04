@@ -14,21 +14,19 @@ namespace ExpenSpend.Web.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IUserRepository _userRepository;
-    private readonly UserManager<User> _userManager;
     private readonly IMapper _mapper;
 
 
-    public UserController(IUserRepository userRepository, UserManager<User> userManager, IMapper mapper)
+    public UserController(IUserRepository userRepository, IMapper mapper)
     {
         _userRepository = userRepository;
-        _userManager = userManager;
         _mapper = mapper;
     }
     
     [HttpGet]
     public async Task<IActionResult> GetLoggedInUser()
     {
-        var user =  await _userManager.GetUserAsync(User);
+        var user =  await _userRepository.GetLoggedInUser(User);
         if (user == null)
         {
             return NotFound("User not found");

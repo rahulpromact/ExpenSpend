@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpenSpend.Web", "ExpenSpend\ExpenSpend.Web.csproj", "{F9F5D600-82C3-4558-BD4C-9312D5A334F4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpenSpend.Web", "ExpenSpend.Web\ExpenSpend.Web.csproj", "{F9F5D600-82C3-4558-BD4C-9312D5A334F4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpenSpend.Domain", "ExpenSpend.Domain\ExpenSpend.Domain.csproj", "{B95F191F-E2D9-417C-BA77-9A89C6269DB0}"
 EndProject
@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpenSpend.Repository", "Ex
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpenSpend.Domain.Shared", "ExpenSpend.Domain.Shared\ExpenSpend.Domain.Shared.csproj", "{FDDDDFF8-61E3-4BBC-A2C2-3EE29C790918}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpenSpend.Util", "ExpenSpend.Util\ExpenSpend.Util.csproj", "{4C5DF049-1FEA-4701-899A-0BED7A307CD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpenSpend.Service", "ExpenSpend.Service\ExpenSpend.Service.csproj", "{5F859B3A-DF03-4B00-860C-9CF4A87A427F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,10 +41,10 @@ Global
 		{FDDDDFF8-61E3-4BBC-A2C2-3EE29C790918}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FDDDDFF8-61E3-4BBC-A2C2-3EE29C790918}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FDDDDFF8-61E3-4BBC-A2C2-3EE29C790918}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4C5DF049-1FEA-4701-899A-0BED7A307CD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4C5DF049-1FEA-4701-899A-0BED7A307CD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4C5DF049-1FEA-4701-899A-0BED7A307CD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4C5DF049-1FEA-4701-899A-0BED7A307CD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F859B3A-DF03-4B00-860C-9CF4A87A427F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F859B3A-DF03-4B00-860C-9CF4A87A427F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F859B3A-DF03-4B00-860C-9CF4A87A427F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F859B3A-DF03-4B00-860C-9CF4A87A427F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

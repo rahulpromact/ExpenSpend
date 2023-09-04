@@ -27,7 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ExpenSpend.Domain\ExpenSpend.Domain.csproj" />
     <ProjectReference Include="..\ExpenSpend.Repository\ExpenSpend.Repository.csproj" />
-    <ProjectReference Include="..\ExpenSpend.Util\ExpenSpend.Util.csproj" />
+    <ProjectReference Include="..\ExpenSpend.Service\ExpenSpend.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>

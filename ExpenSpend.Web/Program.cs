@@ -1,9 +1,10 @@
+using ExpenSpend.Core.Email;
 using ExpenSpend.Domain.Context;
 using ExpenSpend.Domain.Models;
 using ExpenSpend.Repository.Account;
 using ExpenSpend.Repository.User;
-using ExpenSpend.Util.Models;
-using ExpenSpend.Util.Services;
+using ExpenSpend.Service.Email;
+using ExpenSpend.Service.Email.Interface;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,7 +30,7 @@ builder.Services.AddIdentity<User, IdentityRole>(options => options
 builder.Services.Configure<DataProtectionTokenProviderOptions>(options => options.TokenLifespan = TimeSpan.FromHours(2));
 
 // Configure Email Service
-builder.Services.AddSingleton(configuration.GetSection("EmailConfig").Get<EmailConfiguration>());
+builder.Services.AddSingleton(configuration.GetSection("EmailConfig").Get<EmailConfigurationDto>());
 
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();

@@ -4,7 +4,7 @@ using ExpenSpend.Core.User;
 using ExpenSpend.Domain.Models;
 using ExpenSpend.Domain.Shared.Account;
 using ExpenSpend.Repository.Account;
-using ExpenSpend.Util.Services;
+using ExpenSpend.Service.Email.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,8 +41,8 @@ public class AccountController : ControllerBase
 
             return Ok(AccConsts.RegSuccessMessage);
         }
-
-        return BadRequest($"Registration failed: {string.Join(", ", registrationResult.Errors)}");
+        registrationResult.Errors.ToList().ForEach(error => ModelState.AddModelError(error.Code, error.Description));
+        return BadRequest(ModelState);
     }
 
     [HttpGet]
@@ -64,7 +64,8 @@ public class AccountController : ControllerBase
             return Content(htmlContent, "text/html");
         }
 
-        return Content($"{AccConsts.ConfEmailFailed}: {string.Join(", ", emailConfirmationResult.Errors)}");
+        emailConfirmationResult.Errors.ToList().ForEach(error => ModelState.AddModelError(error.Code, error.Description));
+        return Content(ModelState.ToString()!);
     }
 
 
@@ -124,13 +125,11 @@ public class AccountController : ControllerBase
         var resetPasswordResult = await _accountRepository.ResetPasswordAsync(user, resetPasswordDto.Token, resetPasswordDto.Password);
         if (resetPasswordResult.Succeeded)
         {
+            _emailService.SandPasswordChangeNotification(user.Email, user.FirstName!);
             return Ok();
         }
 
-        foreach (var error in resetPasswordResult.Errors)
-        {
-            ModelState.AddModelError(error.Code, error.Description);
-        }
+        resetPasswordResult.Errors.ToList().ForEach(error => ModelState.AddModelError(error.Code, error.Description));
         return BadRequest(ModelState);
     }
 

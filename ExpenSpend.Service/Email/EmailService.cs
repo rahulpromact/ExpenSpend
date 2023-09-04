@@ -72,11 +72,6 @@ public class EmailService : IEmailService
             client.Authenticate(_emailConfig.UserName, _emailConfig.UserPassword);
             await client.SendAsync(mailMessage);
         }
-        catch
-        {
-            // log here
-            throw;
-        }
         finally
         {
             client.Disconnect(true);

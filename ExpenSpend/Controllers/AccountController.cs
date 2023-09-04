@@ -125,7 +125,7 @@ public class AccountController : ControllerBase
         var resetPasswordResult = await _accountRepository.ResetPasswordAsync(user, resetPasswordDto.Token, resetPasswordDto.Password);
         if (resetPasswordResult.Succeeded)
         {
-            _emailService.SandPasswordChangeNotification(user.Email, user.UserName!);
+            _emailService.SandPasswordChangeNotification(user.Email, user.FirstName!);
             return Ok();
         }
 

@@ -1,12 +1,11 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using ExpenSpend.Core.User;
 using ExpenSpend.Repository.User;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Security.Claims;
 
-namespace ExpenSpend.Web.Controllers;
+namespace ExpenSpend.Web.Controllers.User;
 
 [Route("api/[controller]/[action]")]
 [ApiController]

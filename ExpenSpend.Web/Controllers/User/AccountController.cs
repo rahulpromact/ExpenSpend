@@ -1,19 +1,18 @@
-﻿using AutoMapper;
+﻿using System.IdentityModel.Tokens.Jwt;
+using AutoMapper;
 using ExpenSpend.Core.Account;
 using ExpenSpend.Core.User;
-using ExpenSpend.Domain.Models;
 using ExpenSpend.Domain.Shared.Account;
 using ExpenSpend.Repository.Account;
 using ExpenSpend.Service.Email.Interface;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
 
-namespace ExpenSpend.Web.Controllers;
+namespace ExpenSpend.Web.Controllers.User;
 
 [Route("api/[controller]/[action]")]
 [ApiController]
-public class AccountController : ControllerBase
+public class AccountController: ControllerBase
 {
     
     private readonly IAccountRepository _accountRepository;
@@ -29,7 +28,7 @@ public class AccountController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> RegisterUserAsync(CreateUserDto input)
     {
-        var user = _mapper.Map<User>(input);
+        var user = _mapper.Map<Domain.Models.User>(input);
         var registrationResult = await _accountRepository.RegisterUserAsync(user, input.Password);
 
         if (registrationResult.Succeeded)
@@ -137,7 +136,7 @@ public class AccountController : ControllerBase
         var resetPasswordResult = await _accountRepository.ResetPasswordAsync(user, resetPasswordDto.Token, resetPasswordDto.Password);
         if (resetPasswordResult.Succeeded)
         {
-            _emailService.SandPasswordChangeNotification(user.Email, user.FirstName!);
+            _emailService.SandPasswordChangeNotification(user.Email, user.FirstName);
             return Ok();
         }
 

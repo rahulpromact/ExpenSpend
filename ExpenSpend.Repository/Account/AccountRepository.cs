@@ -77,7 +77,7 @@ public class AccountRepository : IAccountRepository
         var user = await _userManager.FindByNameAsync(userName);
         if (user == null || !await _userManager.CheckPasswordAsync(user, password))
         {
-            return null!;
+            return null;
         }
 
         var authClaims = new List<Claim>

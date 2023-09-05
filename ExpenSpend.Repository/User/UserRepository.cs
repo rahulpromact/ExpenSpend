@@ -1,8 +1,5 @@
-﻿using ExpenSpend.Domain.Context;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
 
 namespace ExpenSpend.Repository.User;
 

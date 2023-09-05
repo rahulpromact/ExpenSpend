@@ -28,7 +28,7 @@ public class AccountController: ControllerBase
     [HttpPost]
     public async Task<IActionResult> RegisterUserAsync(CreateUserDto input)
     {
-        var user = _mapper.Map<Domain.Models.User>(input);
+        var user = _mapper.Map<Domain.Models.Users.User>(input);
         var registrationResult = await _accountRepository.RegisterUserAsync(user, input.Password);
 
         if (registrationResult.Succeeded)

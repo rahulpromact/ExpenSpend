@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ExpenSpend.Core.User;
-using ExpenSpend.Domain.Models;
+using ExpenSpend.Domain.Models.Users;
 
 namespace ExpenSpend.Web
 {

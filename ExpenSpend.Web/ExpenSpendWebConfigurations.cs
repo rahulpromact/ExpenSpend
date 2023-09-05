@@ -2,6 +2,7 @@
 using ExpenSpend.Core.Email;
 using ExpenSpend.Domain.Context;
 using ExpenSpend.Domain.Models;
+using ExpenSpend.Domain.Models.Users;
 using ExpenSpend.Repository.Account;
 using ExpenSpend.Repository.User;
 using ExpenSpend.Service.Email;

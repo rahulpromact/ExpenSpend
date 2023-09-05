@@ -9,7 +9,6 @@
   <ItemGroup>
     <Folder Include="Migrations\" />
     <Folder Include="Context\" />
-    <Folder Include="Models\" />
   </ItemGroup>
 
   <ItemGroup>

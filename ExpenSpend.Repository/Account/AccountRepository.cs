@@ -12,14 +12,14 @@ namespace ExpenSpend.Repository.Account;
 
 public class AccountRepository : IAccountRepository
 {
-    private readonly UserManager<Domain.Models.User> _userManager;
-    private readonly SignInManager<Domain.Models.User> _signInManager;
+    private readonly UserManager<Domain.Models.Users.User> _userManager;
+    private readonly SignInManager<Domain.Models.Users.User> _signInManager;
     private readonly ExpenSpendDbContext _context;
     private readonly IConfiguration _configuration;
 
     public AccountRepository(
-        UserManager<Domain.Models.User> userManager, 
-        SignInManager<Domain.Models.User> signInManager, 
+        UserManager<Domain.Models.Users.User> userManager, 
+        SignInManager<Domain.Models.Users.User> signInManager, 
         ExpenSpendDbContext context,
         IConfiguration configuration
         )
@@ -29,7 +29,7 @@ public class AccountRepository : IAccountRepository
         _context = context;
         _configuration = configuration;
     }
-    public async Task<IdentityResult> RegisterUserAsync(Domain.Models.User user, string password)
+    public async Task<IdentityResult> RegisterUserAsync(Domain.Models.Users.User user, string password)
     {
         return await _userManager.CreateAsync(user, password);
     }
@@ -44,31 +44,31 @@ public class AccountRepository : IAccountRepository
         await _signInManager.SignOutAsync();
     }
 
-    public async Task<Domain.Models.User?> FindByUserNameAsync(string userName)
+    public async Task<Domain.Models.Users.User?> FindByUserNameAsync(string userName)
     {
         return await _userManager.FindByNameAsync(userName);
     }
 
-    public async Task<Domain.Models.User?> FindByEmail(string email)
+    public async Task<Domain.Models.Users.User?> FindByEmail(string email)
     {
         return  await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
     }
 
-    public async Task<IdentityResult> ResetPasswordAsync(Domain.Models.User user, string token, string newPassword)
+    public async Task<IdentityResult> ResetPasswordAsync(Domain.Models.Users.User user, string token, string newPassword)
     {
         return await _userManager.ResetPasswordAsync(user, token, newPassword);
     }
 
-    public async Task<string> GenerateEmailConfirmationTokenAsync(Domain.Models.User user)
+    public async Task<string> GenerateEmailConfirmationTokenAsync(Domain.Models.Users.User user)
     {
         return await _userManager.GenerateEmailConfirmationTokenAsync(user);
     }
     
-    public async Task<IdentityResult> ConfirmEmailAsync(Domain.Models.User user, string token)
+    public async Task<IdentityResult> ConfirmEmailAsync(Domain.Models.Users.User user, string token)
     {
         return await _userManager.ConfirmEmailAsync(user, token);
     }
-    public async Task<string> GenerateResetToken(Domain.Models.User user)
+    public async Task<string> GenerateResetToken(Domain.Models.Users.User user)
     {
         return await _userManager.GeneratePasswordResetTokenAsync(user);
     }

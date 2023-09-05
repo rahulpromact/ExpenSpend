@@ -1,4 +1,4 @@
-﻿using ExpenSpend.Domain.Models;
+﻿using ExpenSpend.Domain.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -15,11 +15,7 @@ namespace ExpenSpend.Domain.Context
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            //SeedRoles(builder);
-            //SeedUsers(builder);
         }
-
-        /// seeding roles in the database
         private static void SeedRoles(ModelBuilder builder)
         {
             builder.Entity<IdentityRole>().HasData(
@@ -49,6 +45,5 @@ namespace ExpenSpend.Domain.Context
                     PasswordHash = hasher.HashPassword(null, "1q2w3E*")
                 });
         }
-
     }
 }

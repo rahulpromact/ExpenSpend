@@ -1,12 +1,11 @@
-﻿using AutoMapper;
+﻿using System.Security.Claims;
+using AutoMapper;
 using ExpenSpend.Core.User;
-using ExpenSpend.Domain.Models;
 using ExpenSpend.Repository.User;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ExpenSpend.Web.Controllers;
+namespace ExpenSpend.Web.Controllers.User;
 
 [Route("api/[controller]/[action]")]
 [ApiController]
@@ -26,7 +25,7 @@ public class UserController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetLoggedInUser()
     {
-        var user =  await _userRepository.GetLoggedInUser(User);
+        var user = await _userRepository.GetUserByIdAsync(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
         if (user == null)
         {
             return NotFound("User not found");
